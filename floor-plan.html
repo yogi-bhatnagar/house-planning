@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Plan Item Manager</title>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <style>
+        #floor-plan img {
+            width: 100%;
+            max-width: 500px;
+            display: none; /* Hide images initially */
+        }
+        #info-panel, #item-editor {
+            border: 1px solid black;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #item-editor input, #item-editor button {
+            margin-top: 5px;
+        }
+    </style>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDi6LXq-1blivee9V2VgI3WyCPTGTkY8Es",
+    authDomain: "house-planning-54442.firebaseapp.com",
+    projectId: "house-planning-54442",
+    storageBucket: "house-planning-54442.appspot.com",
+    messagingSenderId: "347225987686",
+    appId: "1:347225987686:web:3b79053e9b0b217d1eaba7"
+  };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function loadData() {
+            db.collection("items").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(`${doc.id} => ${doc.data().item}`);
+                });
+            });
+        }
+
+        function addItem() {
+            var itemName = document.getElementById('item-name').value;
+            var itemPrice = document.getElementById('item-price').value;
+            if (itemName && itemPrice) {
+                db.collection("items").add({
+                    item: itemName,
+                    price: parseInt(itemPrice)
+                })
+                .then(() => {
+                    console.log("Document successfully written!");
+                    document.getElementById('item-name').value = '';
+                    document.getElementById('item-price').value = '';
+                    alert('Item added!');
+                    loadData();
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
+            } else {
+                alert('Please fill in both fields.');
+            }
+        }
+
+        function removeItem(docId) {
+            db.collection("items").doc(docId).delete().then(() => {
+                console.log("Document successfully deleted!");
+                loadData();
+            }).catch((error) => {
+                console.error("Error removing document: ", error);
+            });
+        }
+
+        // Call loadData when the page loads
+        window.onload = loadData;
+    </script>
+</head>
+<body>
+    <h1>Floor Plan Item Manager</h1>
+    <div id="floor-plan">
+        <img src="gs://house-planning-54442.appspot.com/Main Floor.png" id="main-floor" style="display:block;">
+        <img src="gs://house-planning-54442.appspot.com/Basement.png" id="basement-floor">
+    </div>
+
+    <div id="info-panel">Select a section to see items.</div>
+
+    <h2>Add New Item</h2>
+    <div id="item-editor">
+        <input type="text" id="item-name" placeholder="Item Name">
+        <input type="number" id="item-price" placeholder="Item Price">
+        <button onclick="addItem()">Add Item</button>
+    </div>
+
+</body>
+</html>
