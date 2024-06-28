@@ -53,141 +53,13 @@
 <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
 <script>
-
-// Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-  
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDi6LXq-1blivee9V2VgI3WyCPTGTkY8Es",
-      authDomain: "house-planning-54442.firebaseapp.com",
-      projectId: "house-planning-54442",
-      storageBucket: "house-planning-54442.appspot.com",
-      messagingSenderId: "347225987686",
-      appId: "1:347225987686:web:3b79053e9b0b217d1eaba7"
-    };
-  
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    var db = firebase.firestore();
-
-    function addItem() {
-        var itemName = document.getElementById('item-name').value;
-        var itemPrice = document.getElementById('item-price').value;
-        var currentFloor = document.getElementById('current-floor').value;
-        if (itemName && itemPrice) {
-            db.collection("items").add({
-                name: itemName,
-                price: itemPrice,
-                floor: currentFloor
-            })
-            .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-                alert('Item added: ' + itemName + ' at $' + itemPrice);
-                document.getElementById('item-name').value = '';
-                document.getElementById('item-price').value = '';
-                loadItems(); // Refresh the list of items
-            })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
-            });
-        } else {
-            alert('Please fill in both fields.');
-        }
-    }
-
-    function loadItems() {
-        document.getElementById('info-panel').innerHTML = '';
-        var currentFloor = document.getElementById('current-floor').value;
-        db.collection("items").where("floor", "==", currentFloor).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                document.getElementById('info-panel').innerHTML += '<li>' + doc.data().name + ' - $' + doc.data().price + '</li>';
-            });
-        });
-    }
-
-    function showFloor(floor) {
-        document.getElementById('current-floor').value = floor;
-        document.querySelectorAll('#floor-plan img').forEach(img => img.style.display = 'none');
-        document.getElementById(floor + '-floor').style.display = 'block';
-        loadItems();
-    }
-
-    window.onload = function() {
-        showFloor('main'); // Default to main floor
-    }
-</script>
-</head>
-<body>
-    <h1>Floor Plan Item Manager</h1>
-    <button onclick="showFloor('main')">Main Floor</button>
-    <button onclick="showFloor('basement')">Basement</button>
-    <div id="floor-plan">
-        <img src="main_floor.jpg" id="main-floor" alt="Main Floor">
-        <img src="<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Floor Plan Item Manager</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 20px;
-    }
-    h1 {
-        color: #333;
-    }
-    #floor-plan img {
-        width: 100%;
-        max-width: 500px;
-        display: none; /* Hide images initially */
-    }
-    #info-panel, #item-editor {
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 15px;
-        margin-top: 20px;
-        width: auto;
-    }
-    input[type="text"], input[type="number"], button {
-        padding: 10px;
-        margin-top: 5px;
-        margin-right: 10px;
-        vertical-align: middle;
-    }
-    button {
-        color: white;
-        background-color: #007BFF;
-        border: none;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #0056b3;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-</style>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-<script>
     var firebaseConfig = {
-        apiKey: "your-api-key",
-        authDomain: "your-project-id.firebaseapp.com",
-        projectId: "your-project-id",
-        storageBucket: "your-project-id.appspot.com",
-        messagingSenderId: "your-sender-id",
-        appId: "your-app-id"
+        apiKey: "AIzaSyDi6LXq-1blivee9V2VgI3WyCPTGTkY8Es",
+        authDomain: "house-planning-54442.firebaseapp.com",
+        projectId: "house-planning-54442",
+        storageBucket: "house-planning-54442.appspot.com",
+        messagingSenderId: "347225987686",
+        appId: "1:347225987686:web:3b79053e9b0b217d1eaba7"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
@@ -247,18 +119,6 @@
     <div id="floor-plan">
         <img src="https://firebasestorage.googleapis.com/v0/b/house-planning-54442.appspot.com/o/Main%20Floor.png?alt=media&token=83423e5d-17e8-46c6-8905-c7b3d3742999" id="main-floor" alt="Main Floor">
         <img src="https://firebasestorage.googleapis.com/v0/b/house-planning-54442.appspot.com/o/Basement.png?alt=media&token=3d84ccc5-f68f-4726-9044-57ff58ea9915" id="basement-floor" alt="Basement">
-    </div>
-    <ul id="info-panel">Select a section to see items.</ul>
-    <input type="hidden" id="current-floor" value="">
-    <div id="item-editor">
-        <h2>Add New Item</h2>
-        <input type="text" id="item-name" placeholder="Item Name">
-        <input type="number" id="item-price" placeholder="Item Price">
-        <button onclick="addItem()">Add Item</button>
-    </div>
-</body>
-</html>
-" id="basement-floor" alt="Basement">
     </div>
     <ul id="info-panel">Select a section to see items.</ul>
     <input type="hidden" id="current-floor" value="">
