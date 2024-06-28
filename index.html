@@ -16,15 +16,15 @@
     }
     #floor-plan {
         position: relative;
+        max-width: 600px;
     }
     #floor-plan img {
         width: 100%;
-        max-width: 600px;
+        display: none; /* Hide images initially */
     }
     .section {
         position: absolute;
         background-color: rgba(0, 123, 255, 0.4);
-        display: none;
     }
     .section:hover {
         background-color: rgba(0, 123, 255, 0.7);
@@ -127,23 +127,26 @@
         loadItems();
     }
 
-    function highlightSection(sectionId) {
+    function showFloor(floor) {
+        document.querySelectorAll('#floor-plan img').forEach(img => img.style.display = 'none');
         document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
-        document.getElementById(sectionId).style.display = 'block';
+        document.getElementById(floor + '-floor').style.display = 'block';
+        document.querySelectorAll('.' + floor).forEach(section => section.style.display = 'block');
     }
 
     window.onload = function() {
         document.querySelectorAll('.section').forEach(section => {
             section.addEventListener('mouseover', function() {
-                highlightSection(this.id);
+                this.style.backgroundColor = 'rgba(0, 123, 255, 0.7)';
             });
             section.addEventListener('mouseout', function() {
-                this.style.display = 'none';
+                this.style.backgroundColor = 'rgba(0, 123, 255, 0.4)';
             });
             section.addEventListener('click', function() {
                 showSection(this.id);
             });
         });
+        showFloor('main'); // Default to main floor
     }
 </script>
 </head>
@@ -154,13 +157,21 @@
     <div id="floor-plan">
         <img src="https://firebasestorage.googleapis.com/v0/b/house-planning-54442.appspot.com/o/Main%20Floor.png?alt=media&token=83423e5d-17e8-46c6-8905-c7b3d3742999" id="main-floor" alt="Main Floor">
         <img src="https://firebasestorage.googleapis.com/v0/b/house-planning-54442.appspot.com/o/Basement.png?alt=media&token=3d84ccc5-f68f-4726-9044-57ff58ea9915" id="basement-floor" alt="Basement">
-        <!-- Highlight sections based on the provided floor plans -->
-        <div class="section" id="living" style="top: 85%; left: 0; width: 45%; height: 15%;"></div>
-        <div class="section" id="dining" style="top: 70%; left: 0; width: 45%; height: 15%;"></div>
-        <div class="section" id="kitchen" style="top: 70%; left: 45%; width: 55%; height: 15%;"></div>
-        <div class="section" id="bedroom1" style="top: 0; left: 0; width: 45%; height: 30%;"></div>
-        <div class="section" id="bedroom2" style="top: 0; left: 45%; width: 55%; height: 15%;"></div>
-        <div class="section" id="bedroom3" style="top: 30%; left: 0; width: 45%; height: 15%;"></div>
+        
+        <!-- Highlight sections for Main Floor -->
+        <div class="section main" id="living" style="top: 65%; left: 0; width: 30%; height: 20%;"></div>
+        <div class="section main" id="dining" style="top: 45%; left: 0; width: 30%; height: 20%;"></div>
+        <div class="section main" id="kitchen" style="top: 45%; left: 30%; width: 40%; height: 20%;"></div>
+        <div class="section main" id="bedroom1" style="top: 0; left: 0; width: 30%; height: 30%;"></div>
+        <div class="section main" id="bedroom2" style="top: 0; left: 30%; width: 30%; height: 15%;"></div>
+        <div class="section main" id="bedroom3" style="top: 30%; left: 0; width: 30%; height: 15%;"></div>
+
+        <!-- Highlight sections for Basement -->
+        <div class="section basement" id="primary" style="top: 0; left: 0; width: 30%; height: 30%;"></div>
+        <div class="section basement" id="recroom" style="top: 30%; left: 0; width: 30%; height: 40%;"></div>
+        <div class="section basement" id="gym" style="top: 70%; left: 0; width: 30%; height: 20%;"></div>
+        <div class="section basement" id="laundry" style="top: 70%; left: 30%; width: 20%; height: 20%;"></div>
+        <div class="section basement" id="utility" style="top: 30%; left: 30%; width: 20%; height: 40%;"></div>
         <!-- Add more sections as needed based on your floor plan images -->
     </div>
     <ul id="info-panel">Select a section to see items.</ul>
